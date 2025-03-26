@@ -16,12 +16,12 @@ export default function Home() {
       <header className="w-full h-[100px]">
         <SearchComponent />
       </header>
-      <main className="w-full h-[85%] flex flex-col justify-center items-center gap-3 bg-green-600">
-        <section className="w-[80%] h-[300px] bg-black/50 backdrop-blur-md border-2 border-amber-500 rounded-2xl">
-        <DisplayComponent/>
+      <main className="w-full h-[85%] flex flex-col justify-center items-center gap-3">
+        <section className="w-[80%] h-[300px] bg-black/60 backdrop-blur-md border-2 border-yellow-600 rounded-2xl">
+          <DisplayComponent />
         </section>
-        <section className="w-[80%] h-[85%] bg-black/50 backdrop-blur-md border-2 border-amber-500 rounded-2xl  overflow-y-auto">
-          <PokemonDescription/>
+        <section className="w-[80%] h-[85%] bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto">
+          <PokemonDescription />
         </section>
       </main>
     </div>
