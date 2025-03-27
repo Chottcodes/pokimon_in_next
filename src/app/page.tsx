@@ -58,6 +58,13 @@ export default function Home() {
             setPokemonSpecies(species.name);
             setlocationURL(location_area_encounters);
             setPokemonId(id);
+            if (pokemonId) {
+              const getLocations = await GetPokeLocation(pokemonId);
+              const locationNames = getLocations.map(
+                (locations) => locations.location_area.name
+              );
+              setPokemonLocation(locationNames);
+            }
           }
         } catch (error) {
           console.error("unable to retrieve data", error);
@@ -65,22 +72,10 @@ export default function Home() {
       }
     };
     GetPokeData();
-  }, [pokemonName]);
-  useEffect(() => {
-    const getPokemonLocation = async () => {
-        try {
-          if (pokemonId) {
-            const getLocations = await GetPokeLocation(pokemonId);
-            const locationNames = getLocations.map(locations => locations.location_area.name)
-            setPokemonLocation(locationNames);
-            console.log(locationNames)
-          }
-        } catch (error) {
-          console.error("Unable to Retrive Data", error);
-        }
-    };
-    getPokemonLocation()
-  }, [pokemonId]);
+  }, [pokemonName,pokemonId]);
+  // useEffect(() => {
+
+  // }, [pokemonId]);
   return (
     <div
       className="w-full h-screen"
