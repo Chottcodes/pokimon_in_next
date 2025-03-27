@@ -54,16 +54,9 @@ export interface PokemonSpeciesResponse {
       evolves_to: EvolutionChain[];
     }
   }
-  interface EvolutionChain {
+  export interface EvolutionChain {
     species: {
       name: string;
-      url: string;
     };
-    evolution_details: {
-      min_level?: number;
-      trigger?: {
-        name: string;
-      }
-    }[];
     evolves_to: EvolutionChain[];
   }

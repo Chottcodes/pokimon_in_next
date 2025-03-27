@@ -3,9 +3,18 @@ import SearchComponent from "./components/SearchComponent";
 import DisplayComponent from "./components/DisplayComponent";
 import PokemonDetails from "./components/PokemonDetails";
 import React, { useEffect, useState } from "react";
-import { GetAPI, GetEvolutionChain, GetPokeLocation, GetpokemonSpecies } from "@/utils/DataService";
-import { mapAbilities, mapMoves } from "@/utils/helpers";
-
+import {
+  GetAPI,
+  GetEvolutionChain,
+  GetPokeLocation,
+  GetpokemonSpecies,
+} from "@/utils/DataService";
+import {
+  formatForSearch,
+  getAllEvolutionData,
+  mapAbilities,
+  mapMoves,
+} from "@/utils/helperfunctions";
 
 export default function Home() {
   const [searchInput, setSearchInput] = useState<string | number>("");
@@ -18,15 +27,19 @@ export default function Home() {
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
-  // const [pokemonEvolution, setPokemonEvolution] = useState<string[]>([]);
+  const [pokemonEvolution, setPokemonEvolution] = useState<string[]>([]);
 
   const handleInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    setPokemonName(searchInput);
+    if (typeof searchInput === "string") {
+      const inputFormat = formatForSearch(searchInput);
+      setPokemonName(inputFormat);
+      console.log("formated input", inputFormat);
+    }
   };
- 
+
   useEffect(() => {
     const GetPokeData = async () => {
       //Make a condition to only call the Api when pokemonName is not an empty string
@@ -34,15 +47,8 @@ export default function Home() {
         try {
           const pokemon = await GetAPI(pokemonName);
           if (pokemon) {
-            const {
-              sprites,
-              id,
-              name,
-              moves,
-              types,
-              species,
-              abilities,
-            } = pokemon;
+            const { sprites, id, name, moves, types, species, abilities } =
+              pokemon;
             const abilitiesList = mapAbilities(abilities);
             const movesList = mapMoves(moves);
             setPokemonNameDisplay(name);
@@ -59,14 +65,18 @@ export default function Home() {
               );
               setPokemonLocation(locationNames);
             }
-            if(pokemonName)
-            {
-              const GetSpecies = await GetpokemonSpecies(pokemonName)
-              const {evolution_chain}=GetSpecies
+            if (pokemonName) {
+              const GetSpecies = await GetpokemonSpecies(pokemonName);
+              const { evolution_chain } = GetSpecies;
               const evolutionURL = evolution_chain.url;
-              const EvolutionChainData = await GetEvolutionChain(evolutionURL)
-              const EvolvesTo = EvolutionChainData.chain.evolves_to
-              console.log(EvolvesTo);
+              const EvolutionChainData = await GetEvolutionChain(evolutionURL);
+              const EvolutionDataChain = EvolutionChainData.chain;
+              const AllEvolutions = getAllEvolutionData(EvolutionDataChain);
+              if (AllEvolutions) {
+                setPokemonEvolution(AllEvolutions);
+              } else {
+                setPokemonEvolution(["N/A"]);
+              }
             }
           }
         } catch (error) {
@@ -75,8 +85,8 @@ export default function Home() {
       }
     };
     GetPokeData();
-  }, [pokemonName,pokemonId]);
-  
+  }, [pokemonName, pokemonId]);
+
   return (
     <div
       className="w-full h-screen"
@@ -112,7 +122,10 @@ export default function Home() {
             Title="Location"
             pokename={pokemonLocation.join(", ")}
           />
-          <PokemonDetails Title="Evolution" pokename={pokemonType} />
+          <PokemonDetails
+            Title="Evolution"
+            pokename={pokemonEvolution.join(", ")}
+          />
         </section>
       </main>
     </div>
