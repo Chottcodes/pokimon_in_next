@@ -1,4 +1,4 @@
-import { LocationArea, PokemonMain } from "./interfaces";
+import { PokemonLocationResponse, PokemonMain } from "./interfaces";
 
 
 const GetAPI = async (pokemonName: string | number): Promise<PokemonMain> => {
@@ -12,7 +12,7 @@ const GetAPI = async (pokemonName: string | number): Promise<PokemonMain> => {
         throw error; 
     }
 }
-const GetPokeLocation = async (id:number): Promise<LocationArea> =>{
+const GetPokeLocation = async (id:number): Promise<PokemonLocationResponse[]> =>{
     try{
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/encounters`)
     const data = await response.json();

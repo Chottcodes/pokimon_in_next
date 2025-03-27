@@ -33,6 +33,8 @@ interface PokemonSprites{
     front_default:string;
     front_shiny:string;
 }
-export interface LocationArea{
-    name:string
+export interface PokemonLocationResponse {
+    location_area: {
+        name:string
+    }
 }
