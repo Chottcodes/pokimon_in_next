@@ -22,6 +22,8 @@ export const mapMoves = (moves: { move: { name: string } }[]) => {
     transformedString = transformedString.toLowerCase();
     return transformedString;
 }
+
+
     
 
   

@@ -60,10 +60,15 @@ export default function Home() {
             setPokemonId(id);
             if (pokemonId) {
               const getLocations = await GetPokeLocation(pokemonId);
-              const locationNames = getLocations.map(
-                (locations) => locations.location_area.name
-              );
-              setPokemonLocation(locationNames);
+              if(getLocations.length>0){
+                const locationNames = getLocations.map(
+                  (locations) => locations.location_area.name
+                );
+                setPokemonLocation(locationNames);
+              }
+              else{
+                setPokemonLocation(['N/A']);
+              }
             }
             if (pokemonName) {
               const GetSpecies = await GetpokemonSpecies(pokemonName);
