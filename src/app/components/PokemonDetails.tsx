@@ -1,10 +1,14 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 
-interface propTypes{
-    Title:string
+interface propTypes {
+  Title: string
+  pokename: string
 }
-const PokemonDetails = (props:propTypes) => {
-    const {Title} = props
+const PokemonDetails = (props: propTypes) => {
+  const { Title,pokename } = props;
+  
+ 
   return (
     <div className="w-full h-[150px] flex flex-col justify-center items-center">
       <header className="w-full h-[50%] text-[#FFCA00] flex flex-col justify-center items-center gap-3 text-2xl">
@@ -13,7 +17,7 @@ const PokemonDetails = (props:propTypes) => {
       </header>
       <section className="w-full h-[50%] overflow-y-auto flex flex-col justify-center items-center">
         <div className="h-full">
-            
+            <p>{pokename}</p>
         </div>
       </section>
     </div>
