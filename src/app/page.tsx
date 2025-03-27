@@ -14,12 +14,11 @@ export default function Home() {
   const [pokemonImage, setPokemonImage] = useState<string>("");
   const [pokemonType, setPokemonType] = useState<string>("");
   const [pokemonSpecies, setPokemonSpecies] = useState<string>("");
-  const [speciesURL,setSpeciesURL] = useState<string>('')
   const [pokemonId, setPokemonId] = useState<number>();
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
-  const [pokemonEvolution, setPokemonEvolution] = useState<string[]>([]);
+  // const [pokemonEvolution, setPokemonEvolution] = useState<string[]>([]);
 
   const handleInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -52,7 +51,6 @@ export default function Home() {
             setPokemonAbilities(abilitiesList);
             setPokemonMoves(movesList);
             setPokemonSpecies(species.name);
-            setSpeciesURL(species.url);
             setPokemonId(id);
             if (pokemonId) {
               const getLocations = await GetPokeLocation(pokemonId);
