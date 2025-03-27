@@ -7,9 +7,18 @@ import { GetAPI } from "@/utils/DataService";
 
 export default function Home() {
   const [searchInput, setSearchInput] = useState<string | number>("");
-  const [pokemonName, setPokemonName] = useState<string | number>("");
+  const [pokemonName, setPokemonName] = useState<string | number>("Pikachu");
   const [pokemonNameDisplay, setPokemonNameDisplay] = useState<string>("");
   const [pokemonImage, setPokemonImage] = useState<string>("");
+  const [pokemonType, setPokemonType] = useState<string>("");
+  const [pokemonSpecies, setPokemonSpecies]=useState<string>("");
+  const [pokemonId, setPokemonId]=useState<number>();
+
+  const [locationURL, setlocationURL]=useState<string>("");
+  
+  const [pokemonAbilities,setPokemonAbilities] = useState<string[]>([]);
+  const [pokemonMoves,setPokemonMoves] = useState<string[]>([]);
+  const [pokemonEvolution,setPokemonEvolution] = useState<string[]>([]);
 
   const handleInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -17,34 +26,40 @@ export default function Home() {
   const handleButtonClick = () => {
     setPokemonName(searchInput);
   };
-  const PokemonDetailsObj = [
-    { Type: "Type" },
-    { Abilities: "Abilities" },
-    { Moves: "Moves" },
-    { Location: "Location" },
-    { Evolution: "Evolution" },
-  ];
-
+  const mapAbilities = (abilities: { ability: { name: string } }[]) => {
+    return abilities.map((ability) => ability.ability.name);
+  };
+  const mapMoves = (moves: { move: { name: string } }[]) => {
+    return moves.map((move) => move.move.name);
+  };
   useEffect(() => {
     const GetPokeData = async () => {
       //Make a condition to only call the Api when pokemonName is not an empty string
       if (pokemonName) {
         try {
           const pokemon = await GetAPI(pokemonName);
-          console.log(pokemon);
           if (pokemon) {
             const {
               sprites,
-              name,
               id,
+              name,
               location_area_encounters,
               moves,
               types,
               species,
               abilities,
             } = pokemon;
+            const abilitiesList = mapAbilities(abilities)
+            const movesList = mapMoves(moves)
             setPokemonNameDisplay(name);
             setPokemonImage(sprites.front_default);
+            setPokemonType(types[0].type.name);
+            setPokemonAbilities(abilitiesList)
+            setPokemonMoves(movesList);
+            setPokemonSpecies(species.name);
+            setlocationURL(location_area_encounters)
+            setPokemonId(id)
+            
           }
         } catch (error) {
           console.error("unable to retrieve data", error);
@@ -54,7 +69,7 @@ export default function Home() {
     GetPokeData();
   }, [pokemonName]);
   useEffect(() => {
-    console.log(pokemonImage);
+    console.log(locationURL);
   }, [pokemonNameDisplay]);
   return (
     <div
@@ -80,7 +95,11 @@ export default function Home() {
           />
         </section>
         <section className="w-[80%] h-[85%] bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto">
-          <PokemonDetails Title="Type" pokename="sdf" />
+          <PokemonDetails Title="Type" pokename={pokemonType} />
+          <PokemonDetails Title="Abilities" pokename={pokemonAbilities.join(", ")} />
+          <PokemonDetails Title="Moves" pokename={pokemonMoves.join(", ")} />
+          <PokemonDetails Title="Species" pokename={pokemonSpecies} />
+          <PokemonDetails Title="Evolution" pokename={pokemonType} />
         </section>
       </main>
     </div>

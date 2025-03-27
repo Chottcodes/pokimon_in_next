@@ -16,7 +16,7 @@ const PokemonDetails = (props: propTypes) => {
         <hr className="w-[90%]" />
       </header>
       <section className="w-full h-[50%] overflow-y-auto flex flex-col justify-center items-center">
-        <div className="h-full">
+        <div className="h-full w-[90%] text-[#FFCA00] text-center text-xl">
             <p>{pokename}</p>
         </div>
       </section>

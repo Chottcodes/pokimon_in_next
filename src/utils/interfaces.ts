@@ -1,7 +1,7 @@
 export interface PokemonMain {
     abilities: Ability[];
-    id:number;
     name:string;
+    id:number;
     location_area_encounters:string;
     moves:Moves[];
     types:Types[];
@@ -24,7 +24,6 @@ interface Moves {
     };
 }
 interface Types {
-    slot: number;
     type: {
         name: string;
         url: string;
@@ -33,4 +32,7 @@ interface Types {
 interface PokemonSprites{
     front_default:string;
     front_shiny:string;
+}
+export interface LocationArea{
+    name:string
 }
