@@ -8,6 +8,8 @@ import { GetAPI } from "@/utils/DataService";
 export default function Home() {
   const [searchInput, setSearchInput] = useState<string | number>("");
   const [pokemonName, setPokemonName] = useState<string | number>("");
+  const [pokemonNameDisplay, setPokemonNameDisplay] = useState<string>("");
+  const [pokemonImage, setPokemonImage] = useState<string>("");
 
   const handleInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -41,6 +43,8 @@ export default function Home() {
               species,
               abilities,
             } = pokemon;
+            setPokemonNameDisplay(name);
+            setPokemonImage(sprites.front_default);
           }
         } catch (error) {
           console.error("unable to retrieve data", error);
@@ -49,7 +53,9 @@ export default function Home() {
     };
     GetPokeData();
   }, [pokemonName]);
-
+  useEffect(() => {
+    console.log(pokemonImage);
+  }, [pokemonNameDisplay]);
   return (
     <div
       className="w-full h-screen"
@@ -68,7 +74,10 @@ export default function Home() {
       </header>
       <main className="w-full h-[85%] flex flex-col justify-center items-center gap-3">
         <section className="w-[80%] h-[300px] bg-black/60 backdrop-blur-md border-2 border-yellow-600 rounded-2xl">
-          <DisplayComponent />
+          <DisplayComponent
+            pokemonName={pokemonNameDisplay}
+            pokemonImage={pokemonImage}
+          />
         </section>
         <section className="w-[80%] h-[85%] bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto">
           <PokemonDetails Title="Type" pokename="sdf" />
