@@ -38,3 +38,32 @@ export interface PokemonLocationResponse {
         name:string
     }
 }
+export interface PokemonSpeciesResponse {
+    name: string;
+    evolution_chain: {
+      url: string;
+    };
+    
+  }
+  export interface EvolutionChainResponse {
+    chain: {
+      species: {
+        name: string;
+        url: string;
+      };
+      evolves_to: EvolutionChain[];
+    }
+  }
+  interface EvolutionChain {
+    species: {
+      name: string;
+      url: string;
+    };
+    evolution_details: {
+      min_level?: number;
+      trigger?: {
+        name: string;
+      }
+    }[];
+    evolves_to: EvolutionChain[];
+  }

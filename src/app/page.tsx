@@ -3,7 +3,9 @@ import SearchComponent from "./components/SearchComponent";
 import DisplayComponent from "./components/DisplayComponent";
 import PokemonDetails from "./components/PokemonDetails";
 import React, { useEffect, useState } from "react";
-import { GetAPI, GetPokeLocation } from "@/utils/DataService";
+import { GetAPI, GetEvolutionChain, GetPokeLocation, GetpokemonSpecies } from "@/utils/DataService";
+import { mapAbilities, mapMoves } from "@/utils/helpers";
+
 
 export default function Home() {
   const [searchInput, setSearchInput] = useState<string | number>("");
@@ -12,8 +14,8 @@ export default function Home() {
   const [pokemonImage, setPokemonImage] = useState<string>("");
   const [pokemonType, setPokemonType] = useState<string>("");
   const [pokemonSpecies, setPokemonSpecies] = useState<string>("");
+  const [speciesURL,setSpeciesURL] = useState<string>('')
   const [pokemonId, setPokemonId] = useState<number>();
-  const [locationURL, setlocationURL] = useState<string>("");
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
@@ -25,12 +27,7 @@ export default function Home() {
   const handleButtonClick = () => {
     setPokemonName(searchInput);
   };
-  const mapAbilities = (abilities: { ability: { name: string } }[]) => {
-    return abilities.map((ability) => ability.ability.name);
-  };
-  const mapMoves = (moves: { move: { name: string } }[]) => {
-    return moves.map((move) => move.move.name);
-  };
+ 
   useEffect(() => {
     const GetPokeData = async () => {
       //Make a condition to only call the Api when pokemonName is not an empty string
@@ -42,7 +39,6 @@ export default function Home() {
               sprites,
               id,
               name,
-              location_area_encounters,
               moves,
               types,
               species,
@@ -56,7 +52,7 @@ export default function Home() {
             setPokemonAbilities(abilitiesList);
             setPokemonMoves(movesList);
             setPokemonSpecies(species.name);
-            setlocationURL(location_area_encounters);
+            setSpeciesURL(species.url);
             setPokemonId(id);
             if (pokemonId) {
               const getLocations = await GetPokeLocation(pokemonId);
@@ -64,6 +60,15 @@ export default function Home() {
                 (locations) => locations.location_area.name
               );
               setPokemonLocation(locationNames);
+            }
+            if(pokemonName)
+            {
+              const GetSpecies = await GetpokemonSpecies(pokemonName)
+              const {evolution_chain}=GetSpecies
+              const evolutionURL = evolution_chain.url;
+              const EvolutionChainData = await GetEvolutionChain(evolutionURL)
+              const EvolvesTo = EvolutionChainData.chain.evolves_to
+              console.log(EvolvesTo);
             }
           }
         } catch (error) {
@@ -73,9 +78,7 @@ export default function Home() {
     };
     GetPokeData();
   }, [pokemonName,pokemonId]);
-  // useEffect(() => {
-
-  // }, [pokemonId]);
+  
   return (
     <div
       className="w-full h-screen"
