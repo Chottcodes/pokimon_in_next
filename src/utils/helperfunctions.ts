@@ -17,10 +17,13 @@ export const mapMoves = (moves: { move: { name: string } }[]) => {
     }
     return evolutionResult;
   }
-  export function formatForSearch(input:string ) {
+  export const formatForSearch=(input:string )=> {
     let transformedString = input.trim().replace(/ /g, '-');
     transformedString = transformedString.toLowerCase();
     return transformedString;
+}
+export const randomize =()=>{
+  return Math.floor(Math.random() * 650);
 }
 
 

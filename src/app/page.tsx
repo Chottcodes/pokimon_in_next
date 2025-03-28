@@ -14,6 +14,7 @@ import {
   getAllEvolutionData,
   mapAbilities,
   mapMoves,
+  randomize,
 } from "@/utils/helperfunctions";
 
 export default function Home() {
@@ -24,6 +25,8 @@ export default function Home() {
   const [pokemonType, setPokemonType] = useState<string>("");
   const [pokemonSpecies, setPokemonSpecies] = useState<string>("");
   const [pokemonId, setPokemonId] = useState<number>();
+  const [isFavorite,setIsFavorite]=useState<boolean>(false);
+  const [isShiny,setIsShiny]=useState<boolean>(false);
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
@@ -39,6 +42,19 @@ export default function Home() {
       console.log("formated input", inputFormat);
     }
   };
+  const FavoriteOnClick = ()=>{
+    setIsFavorite(true);
+  }
+  const DislikeOnClick = ()=>{
+    setIsFavorite(false);
+  }
+  const handleShiny = ()=>{
+      setIsShiny(!isShiny)
+  }
+  const handleRandomization=()=>{
+    const randomNumber = randomize()
+      setPokemonName(randomNumber)
+  }
 
   useEffect(() => {
     const GetPokeData = async () => {
@@ -52,12 +68,16 @@ export default function Home() {
             const abilitiesList = mapAbilities(abilities);
             const movesList = mapMoves(moves);
             setPokemonNameDisplay(name);
-            setPokemonImage(sprites.front_default);
             setPokemonType(types[0].type.name);
             setPokemonAbilities(abilitiesList);
             setPokemonMoves(movesList);
             setPokemonSpecies(species.name);
             setPokemonId(id);
+            if(!isShiny){
+              setPokemonImage(sprites.front_default);
+            }else{
+              setPokemonImage(sprites.front_shiny);
+            }
             if (pokemonId) {
               const getLocations = await GetPokeLocation(pokemonId);
               if(getLocations.length>0){
@@ -90,7 +110,7 @@ export default function Home() {
       }
     };
     GetPokeData();
-  }, [pokemonName, pokemonId]);
+  }, [pokemonName, pokemonId,isShiny]);
 
   return (
     <div
@@ -113,6 +133,12 @@ export default function Home() {
           <DisplayComponent
             pokemonName={pokemonNameDisplay}
             pokemonImage={pokemonImage}
+            isFavorite={isFavorite}
+            favoriteOnClick={FavoriteOnClick}
+            dislikeOnClick={DislikeOnClick}
+            isShiny={isShiny}
+            handleShine={handleShiny}
+            randomize={handleRandomization}
           />
         </section>
         <section className="w-[80%] h-[85%] bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto">
