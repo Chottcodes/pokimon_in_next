@@ -3,6 +3,7 @@ import SearchComponent from "./components/SearchComponent";
 import DisplayComponent from "./components/DisplayComponent";
 import PokemonDetails from "./components/PokemonDetails";
 import React, { useEffect, useState } from "react";
+
 import {
   GetAPI,
   GetEvolutionChain,
@@ -10,12 +11,15 @@ import {
   GetpokemonSpecies,
 } from "@/utils/DataService";
 import {
+  capitalizeFirstChar,
   formatForSearch,
   getAllEvolutionData,
   mapAbilities,
   mapMoves,
   randomize,
 } from "@/utils/helperfunctions";
+import LikesComponent from "./components/LikesComponent";
+import { getFromLocalStorage } from "@/utils/localStorage";
 
 export default function Home() {
   const [searchInput, setSearchInput] = useState<string | number>("");
@@ -25,8 +29,8 @@ export default function Home() {
   const [pokemonType, setPokemonType] = useState<string>("");
   const [pokemonSpecies, setPokemonSpecies] = useState<string>("");
   const [pokemonId, setPokemonId] = useState<number>();
-  const [isFavorite,setIsFavorite]=useState<boolean>(false);
-  const [isShiny,setIsShiny]=useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isShiny, setIsShiny] = useState<boolean>(false);
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
@@ -36,25 +40,47 @@ export default function Home() {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    if (typeof searchInput === "string") {
+    if (typeof searchInput === "string" ) {
       const inputFormat = formatForSearch(searchInput);
       setPokemonName(inputFormat);
-      console.log("formated input", inputFormat);
     }
   };
-  const FavoriteOnClick = ()=>{
-    setIsFavorite(true);
-  }
-  const DislikeOnClick = ()=>{
-    setIsFavorite(false);
-  }
-  const handleShiny = ()=>{
-      setIsShiny(!isShiny)
-  }
-  const handleRandomization=()=>{
-    const randomNumber = randomize()
-      setPokemonName(randomNumber)
-  }
+  const FavoriteOnClick = () => {
+    if (typeof window !== "undefined") {
+      const localStorageData = getFromLocalStorage();
+      const favoritesArray: string[] = localStorageData
+        ? JSON.parse(localStorageData)
+        : [];
+      if (
+        pokemonNameDisplay != "" &&
+        !favoritesArray.includes(pokemonNameDisplay)
+      ) {
+        favoritesArray.push(pokemonNameDisplay);
+      }
+      localStorage.setItem("PokeFavorites", JSON.stringify(favoritesArray));
+      setIsFavorite(true);
+    }
+  };
+  const DislikeOnClick = () => {
+    if (typeof window !== "undefined") {
+      const getFavorites = JSON.parse(
+        localStorage.getItem("PokeFavorites") || "[]"
+      );
+      const updatedFavorites = getFavorites.filter(
+        (name: string) => name !== pokemonNameDisplay
+      );
+      localStorage.setItem("PokeFavorites", JSON.stringify(updatedFavorites));
+      setIsFavorite(false);
+    }
+  };
+  const handleShiny = () => {
+    setIsShiny(!isShiny);
+  };
+  const handleRandomization = () => {
+    const randomNumber = randomize();
+    setPokemonName(randomNumber);
+  };
+ 
 
   useEffect(() => {
     const GetPokeData = async () => {
@@ -65,29 +91,29 @@ export default function Home() {
           if (pokemon) {
             const { sprites, id, name, moves, types, species, abilities } =
               pokemon;
+            const capitalLetter = capitalizeFirstChar(name);
             const abilitiesList = mapAbilities(abilities);
             const movesList = mapMoves(moves);
-            setPokemonNameDisplay(name);
+            setPokemonNameDisplay(capitalLetter);
             setPokemonType(types[0].type.name);
             setPokemonAbilities(abilitiesList);
             setPokemonMoves(movesList);
             setPokemonSpecies(species.name);
             setPokemonId(id);
-            if(!isShiny){
+            if (!isShiny) {
               setPokemonImage(sprites.front_default);
-            }else{
+            } else {
               setPokemonImage(sprites.front_shiny);
             }
             if (pokemonId) {
               const getLocations = await GetPokeLocation(pokemonId);
-              if(getLocations.length>0){
+              if (getLocations.length > 0) {
                 const locationNames = getLocations.map(
                   (locations) => locations.location_area.name
                 );
                 setPokemonLocation(locationNames);
-              }
-              else{
-                setPokemonLocation(['N/A']);
+              } else {
+                setPokemonLocation(["N/A"]);
               }
             }
             if (pokemonName) {
@@ -110,11 +136,21 @@ export default function Home() {
       }
     };
     GetPokeData();
-  }, [pokemonName, pokemonId,isShiny]);
+  }, [pokemonName, pokemonId, isShiny]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const localStorageFavorites = getFromLocalStorage();
+      if (localStorageFavorites?.includes(pokemonNameDisplay)) {
+        setIsFavorite(true);
+      } else {
+        setIsFavorite(false);
+      }
+    }
+  }, [pokemonNameDisplay]);
 
   return (
     <div
-      className="w-full h-screen"
+      className="w-full h-screen  overflow-hidden relative"
       style={{
         backgroundImage: "url('/assets/images/pokemonbackground.png')",
         backgroundSize: "cover",
@@ -159,6 +195,7 @@ export default function Home() {
           />
         </section>
       </main>
+      <LikesComponent onFavoriteClick={(pokemonName)=>setPokemonName(pokemonName)}/>
     </div>
   );
 }

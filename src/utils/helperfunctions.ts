@@ -25,7 +25,9 @@ export const mapMoves = (moves: { move: { name: string } }[]) => {
 export const randomize =()=>{
   return Math.floor(Math.random() * 650);
 }
-
+export const capitalizeFirstChar = (word: string) => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};
 
     
 
