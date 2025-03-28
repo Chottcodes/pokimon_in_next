@@ -31,6 +31,7 @@ export default function Home() {
   const [pokemonId, setPokemonId] = useState<number>();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isShiny, setIsShiny] = useState<boolean>(false);
+  const [isFieldEmpty, setIsFieldEmpty] = useState<boolean>(false);
   const [pokemonAbilities, setPokemonAbilities] = useState<string[]>([]);
   const [pokemonMoves, setPokemonMoves] = useState<string[]>([]);
   const [pokemonLocation, setPokemonLocation] = useState<string[]>([]);
@@ -40,9 +41,12 @@ export default function Home() {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    if (typeof searchInput === "string" ) {
+    if (typeof searchInput === "string" && searchInput && Number(searchInput) < 660) {
       const inputFormat = formatForSearch(searchInput);
       setPokemonName(inputFormat);
+    }else{
+
+      setIsFieldEmpty(true);
     }
   };
   const FavoriteOnClick = () => {
@@ -80,7 +84,6 @@ export default function Home() {
     const randomNumber = randomize();
     setPokemonName(randomNumber);
   };
- 
 
   useEffect(() => {
     const GetPokeData = async () => {
@@ -147,6 +150,9 @@ export default function Home() {
       }
     }
   }, [pokemonNameDisplay]);
+  useEffect(()=>{
+    if(searchInput != '') setIsFieldEmpty(false)
+  },[searchInput])
 
   return (
     <div
@@ -157,15 +163,16 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      <header className="w-full h-[100px]">
+      <header className="w-full h-[100px]  flex justify-center items-center">
         <SearchComponent
+          isEmpty={isFieldEmpty}
           value={searchInput}
           onChange={handleInputSearch}
           onClick={handleButtonClick}
         />
       </header>
-      <main className="w-full h-[85%] flex flex-col justify-center items-center gap-3">
-        <section className="w-[80%] h-[300px] bg-black/60 backdrop-blur-md border-2 border-yellow-600 rounded-2xl">
+      <main className="w-full h-[85%] flex flex-col lg:flex-row justify-center items-center gap-3 transform-all duration-300">
+        <section className="w-[80%] h-[300px] lg:w-[25%] lg:h-[50%] bg-black/60 backdrop-blur-md border-2 border-yellow-600 rounded-2xl">
           <DisplayComponent
             pokemonName={pokemonNameDisplay}
             pokemonImage={pokemonImage}
@@ -177,7 +184,7 @@ export default function Home() {
             randomize={handleRandomization}
           />
         </section>
-        <section className="w-[80%] h-[85%] bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto">
+        <section className="w-[80%] h-[85%] lg:w-[40%] transform-all duration-300 bg-black/60 backdrop-blur-md border-2 rounded-2xl border-yellow-600 overflow-y-auto scrollable-section">
           <PokemonDetails Title="Type" pokename={pokemonType} />
           <PokemonDetails
             Title="Abilities"
@@ -195,7 +202,9 @@ export default function Home() {
           />
         </section>
       </main>
-      <LikesComponent onFavoriteClick={(pokemonName)=>setPokemonName(pokemonName)}/>
+      <LikesComponent
+        onFavoriteClick={(pokemonName) => setPokemonName(pokemonName)}
+      />
     </div>
   );
 }

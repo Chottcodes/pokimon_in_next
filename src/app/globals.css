@@ -24,3 +24,22 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Customize Scrollbar */
+.scrollable-section::-webkit-scrollbar {
+  width: 8px; /* Adjust width of the scrollbar */
+}
+
+.scrollable-section::-webkit-scrollbar-thumb {
+  background-color: #FFDD00; /* Set the color of the scrollbar thumb */
+  border-radius: 10px; /* Make it rounded */
+}
+
+.scrollable-section::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3); /* Set the track color */
+  border-radius: 10px;
+}
+
+/* Optional: When the thumb is hovered */
+.scrollable-section::-webkit-scrollbar-thumb:hover {
+  background-color: #FFD700; /* Change color on hover */
+}

@@ -18,7 +18,7 @@ const DisplayComponent = (props: propTypes) => {
   return (
     <main className="w-full h-[75%]">
       <div className="w-full h-full flex flex-col justify-center items-center ">
-        <section className="w-[50%] h-[70%] flex flex-col justify-center items-center ">
+        <section className="w-[50%] h-[70%] flex justify-center items-center ">
           {pokemonImage ? (
             <Image
               src={pokemonImage}
@@ -26,13 +26,13 @@ const DisplayComponent = (props: propTypes) => {
               height={150}
               alt={`${pokemonName} sprite`}
               priority
-              style={{ objectFit: "contain" }}
+              className="lg:h-full lg:w-full "
             />
           ) : (
             <div className="text-white">No image available</div>
           )}
         </section>
-        <section className="w-full h-[20%] flex justify-center items-center text-2xl text-yellow-400">
+        <section className="w-full h-[20%] flex justify-center items-center text-2xl lg:text-4xl  text-yellow-400">
           <p>{pokemonName}</p>
         </section>
       </div>

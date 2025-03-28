@@ -51,7 +51,7 @@ const LikesComponent = (props: propTypes) => {
           />
         </button>
         <h2 className="text-3xl text-[#FFCA00] pt-5">Favorites</h2>
-        <hr className="w-[80%] h-1 text-[#FFCA00]" />
+        <hr className="w-[80%] h-1 lg:w-[30%] text-[#FFCA00]" />
       </section>
       <section className="w-full h-[70%] mt-2">
         <div className="w-full h-[90%] flex flex-col gap-3 text-2xl overflow-y-auto">
@@ -60,7 +60,7 @@ const LikesComponent = (props: propTypes) => {
               <li key={index} className="w-full text-center">
                 <button
                   onClick={() => handleFavoriteClick(favorite)}
-                  className="text-lg text-[#FFCA00] hover:text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 w-full"
+                  className="text-lg text-[#FFCA00] hover:text-white py-2 px-4 rounded-md hover:bg-amber-500 w-full lg:w-[30%]"
                 >
                   {favorite}
                 </button>
