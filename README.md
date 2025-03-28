@@ -8,4 +8,6 @@
 
  // You can add multiple dates with description. 3/28/2025
 
-// Person who Peer Reviewed your assignment 
+// Person who Peer Reviewed your assignment
+Andrew Sayasing 
+- Looking good bro. Everything that's needed works. Maybe when seaching for a pokemon you can also let the user "enter" instead of having to, press the button but im just nitpicking. nice job 
