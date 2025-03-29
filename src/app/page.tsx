@@ -41,24 +41,85 @@ export default function Home() {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    if (searchInput && Number(searchInput) < 660) {
-      const inputFormat = formatForSearch(String(searchInput));
-      setPokemonName(inputFormat);
+    let stringNumberArr: string[] = [
+      "1",
+      "2",
+      "3",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "0",
+    ];
+    if (
+      typeof searchInput === "string" &&
+      stringNumberArr.some((char) => searchInput.includes(char))
+    ) {
+      const convertInput = Number(searchInput);
+      if (convertInput < 660) {
+        setPokemonName(convertInput);
+        setIsFieldEmpty(false);
+        console.log('number')
+      }else{
+        setSearchInput('')
+        setIsFieldEmpty(true);
+      }
     } else {
-      setSearchInput("")
-      setIsFieldEmpty(true);
+      const formattedName = formatForSearch(String(searchInput));
+      setPokemonName(formattedName);
+      setIsFieldEmpty(false);
+      console.log("nope");
     }
+
   };
   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault()
-      if (searchInput && Number(searchInput) < 660) {
-        const inputFormat = formatForSearch(String(searchInput));
-        setPokemonName(inputFormat);
+      e.preventDefault();
+      let stringNumberArr: string[] = [
+        "1",
+        "2",
+        "3",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+      ];
+      if (
+        typeof searchInput === "string" &&
+        stringNumberArr.some((char) => searchInput.includes(char))
+      ) {
+        const convertInput = Number(searchInput);
+        if (convertInput < 660) {
+          setPokemonName(convertInput);
+          setIsFieldEmpty(false);
+          console.log('number')
+        }else{
+          setSearchInput('')
+          setIsFieldEmpty(true);
+        }
       } else {
-        setSearchInput("")
-        setIsFieldEmpty(true);
+        const formattedName = formatForSearch(String(searchInput));
+        setPokemonName(formattedName);
+        setIsFieldEmpty(false);
+        console.log("nope");
       }
+
+      // const numericInput = Number(searchInput);
+      // if (!isNaN(numericInput) && numericInput < 660) {
+      //   const inputFormat = formatForSearch(String(numericInput));
+      //   setPokemonName(inputFormat);
+      //   setIsFieldEmpty(false);
+      //   console.log(typeof numericInput) // Reset the empty field state
+      // }
+      // else {
+      //   const formattedName = formatForSearch(String(searchInput));
+      //     setPokemonName(formattedName);
+      //     setIsFieldEmpty(false);
+      //     console.log(typeof numericInput)
+      // }
     }
   };
   const FavoriteOnClick = () => {
@@ -91,17 +152,17 @@ export default function Home() {
   };
   const handleShiny = () => {
     setIsShiny(!isShiny);
-    resetInput()
+    resetInput();
   };
   const handleRandomization = () => {
     const randomNumber = randomize();
     setPokemonName(randomNumber);
-    resetInput()
+    resetInput();
   };
-  const resetInput = ()=>{
-    setSearchInput("")
-    setIsFieldEmpty(false)
-  }
+  const resetInput = () => {
+    setSearchInput("");
+    setIsFieldEmpty(false);
+  };
 
   useEffect(() => {
     const GetPokeData = async () => {
