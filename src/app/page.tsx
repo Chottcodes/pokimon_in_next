@@ -41,12 +41,24 @@ export default function Home() {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    if (typeof searchInput === "string" && searchInput && Number(searchInput) < 660) {
-      const inputFormat = formatForSearch(searchInput);
+    if (searchInput && Number(searchInput) < 660) {
+      const inputFormat = formatForSearch(String(searchInput));
       setPokemonName(inputFormat);
-    }else{
-
+    } else {
+      setSearchInput("")
       setIsFieldEmpty(true);
+    }
+  };
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      if (searchInput && Number(searchInput) < 660) {
+        const inputFormat = formatForSearch(String(searchInput));
+        setPokemonName(inputFormat);
+      } else {
+        setSearchInput("")
+        setIsFieldEmpty(true);
+      }
     }
   };
   const FavoriteOnClick = () => {
@@ -79,11 +91,17 @@ export default function Home() {
   };
   const handleShiny = () => {
     setIsShiny(!isShiny);
+    resetInput()
   };
   const handleRandomization = () => {
     const randomNumber = randomize();
     setPokemonName(randomNumber);
+    resetInput()
   };
+  const resetInput = ()=>{
+    setSearchInput("")
+    setIsFieldEmpty(false)
+  }
 
   useEffect(() => {
     const GetPokeData = async () => {
@@ -150,9 +168,9 @@ export default function Home() {
       }
     }
   }, [pokemonNameDisplay]);
-  useEffect(()=>{
-    if(searchInput != '') setIsFieldEmpty(false)
-  },[searchInput])
+  useEffect(() => {
+    if (searchInput != "") setIsFieldEmpty(false);
+  }, [searchInput]);
 
   return (
     <div
@@ -169,6 +187,7 @@ export default function Home() {
           value={searchInput}
           onChange={handleInputSearch}
           onClick={handleButtonClick}
+          handleKeyDown={handleOnKeyDown}
         />
       </header>
       <main className="w-full h-[85%] flex flex-col lg:flex-row justify-center items-center gap-3 transform-all duration-300">
