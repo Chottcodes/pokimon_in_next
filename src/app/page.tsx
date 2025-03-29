@@ -41,7 +41,7 @@ export default function Home() {
     setSearchInput(e.target.value);
   };
   const handleButtonClick = () => {
-    let stringNumberArr: string[] = [
+    const stringNumberArr: string[] = [
       "1",
       "2",
       "3",
@@ -76,7 +76,7 @@ export default function Home() {
   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      let stringNumberArr: string[] = [
+      const stringNumberArr: string[] = [
         "1",
         "2",
         "3",
