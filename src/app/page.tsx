@@ -60,18 +60,17 @@ export default function Home() {
       if (convertInput < 660) {
         setPokemonName(convertInput);
         setIsFieldEmpty(false);
-        console.log('number')
-      }else{
-        setSearchInput('')
+        
+      } else {
+        setSearchInput("");
         setIsFieldEmpty(true);
       }
     } else {
       const formattedName = formatForSearch(String(searchInput));
       setPokemonName(formattedName);
       setIsFieldEmpty(false);
-      console.log("nope");
+      
     }
-
   };
   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -95,31 +94,16 @@ export default function Home() {
         if (convertInput < 660) {
           setPokemonName(convertInput);
           setIsFieldEmpty(false);
-          console.log('number')
-        }else{
-          setSearchInput('')
+        } else {
+          setSearchInput("");
           setIsFieldEmpty(true);
         }
       } else {
         const formattedName = formatForSearch(String(searchInput));
         setPokemonName(formattedName);
         setIsFieldEmpty(false);
-        console.log("nope");
+        
       }
-
-      // const numericInput = Number(searchInput);
-      // if (!isNaN(numericInput) && numericInput < 660) {
-      //   const inputFormat = formatForSearch(String(numericInput));
-      //   setPokemonName(inputFormat);
-      //   setIsFieldEmpty(false);
-      //   console.log(typeof numericInput) // Reset the empty field state
-      // }
-      // else {
-      //   const formattedName = formatForSearch(String(searchInput));
-      //     setPokemonName(formattedName);
-      //     setIsFieldEmpty(false);
-      //     console.log(typeof numericInput)
-      // }
     }
   };
   const FavoriteOnClick = () => {
@@ -231,7 +215,12 @@ export default function Home() {
   }, [pokemonNameDisplay]);
   useEffect(() => {
     if (searchInput != "") setIsFieldEmpty(false);
-  }, [searchInput]);
+    if (pokemonId && pokemonId > 660) {
+      setPokemonName(randomize);
+      setIsFieldEmpty(true);
+    }
+    
+  }, [searchInput, pokemonId]);
 
   return (
     <div
